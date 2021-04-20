@@ -14,6 +14,7 @@ class Mastermind extends React.PureComponent {
             tries: 0,
             secret: secret,
             moves: [],
+            counter: 120,
             guess: 145, // -1+1, 954 -> -3
             statistics: {
                 wins: 0,
@@ -100,6 +101,11 @@ class Mastermind extends React.PureComponent {
             game = JSON.parse(game);
             this.setState(game);
         }
+        setInterval(this.countdown, 1000);
+    }
+
+    countdown = () => {
+
     }
 
     render = () => {
