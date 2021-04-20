@@ -2,6 +2,12 @@ import React from "react";
 import EmployeeModel from "./model/employee";
 import CardHeader from "./bootstrap/CardHeader";
 import Badge from "./bootstrap/Badge";
+import FormGroup from "./bootstrap/FormGroup";
+import FormPhoto from "./bootstrap/FormPhoto";
+import FormCheckBox from "./bootstrap/FormCheckBox";
+import CardBody from "./bootstrap/CardBody";
+import Card from "./bootstrap/Card";
+import Container from "./bootstrap/Container";
 
 function App() {
     const [employee, setEmployee] = React.useState(new EmployeeModel());
@@ -109,12 +115,11 @@ function App() {
     }
 
     return (
-        <div className="container">
-            <div className="card">
+        <Container>
+            <Card>
                 <CardHeader title="Employee Panel"></CardHeader>
-                <div className="card-body">
-                    <div className="form-group">
-                        <label>Identity No:</label>
+                <CardBody>
+                    <FormGroup label="Identity No">
                         <input type="text"
                                name="identityNo"
                                className="form-control"
@@ -122,33 +127,28 @@ function App() {
                                value={employee.identityNo}></input>
                         <button onClick={findEmployee} className="btn btn-success">Find</button>
                         <button onClick={fireEmployee} className="btn btn-danger">Fire</button>
-                    </div>
-                    <div className="form-group">
-                        <label>Full name:</label>
+                    </FormGroup>
+                    <FormGroup label="Full name">
                         <input type="text" name="fullname" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.fullname}></input>
-                    </div>
-                    <div className="form-group">
-                        <label>Iban:</label>
+                    </FormGroup>
+                    <FormGroup label="Iban">
                         <input type="text" name="iban" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.iban}></input>
-                    </div>
-                    <div className="form-group">
-                        <label>Salary:</label>
+                    </FormGroup>
+                    <FormGroup label="Salary">
                         <input type="text" name="salary" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.salary}></input>
-                    </div>
-                    <div className="form-group">
-                        <label>Birth Year:</label>
+                    </FormGroup>
+                    <FormGroup label="Birth Year">
                         <input type="text" name="birthYear" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.birthYear}></input>
-                    </div>
-                    <div className="form-group">
-                        <label>Department:</label>
+                    </FormGroup>
+                    <FormGroup label="Department">
                         <select type="text" name="department" className="form-control"
                                 onChange={(event) => handleChange(event)}
                                 value={employee.department}>
@@ -157,40 +157,26 @@ function App() {
                             <option>HR</option>
                             <option>Finance</option>
                         </select>
-                    </div>
-                    <div className="form-group">
-                        <div className="form-check">
-                            <input type="checkbox" name="fulltime" className="form-check-input"
-                                   onChange={(event) => handleChange(event)}
-                                   checked={employee.fulltime}></input>
-                            <label>Full time?</label>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Photo:</label>
-                        <img className="img-thumbnail"
-                             src={employee.photo}
-                             alt=""
-                             style={{with: '128px', height: '128px'}}></img>
-                        <label className="btn btn-success">
-                            <input type="file"
-                                   style={{display: "none"}}
-                                   onChange={(event) => handleFileInput(event)}
-                                   className="form-control"></input>
-                            <span>File</span>
-                        </label>
-                    </div>
-                    <div className="form-group">
+                    </FormGroup>
+                    <FormCheckBox name="fulltime"
+                                  label="Full time?"
+                                  handler={handleChange}
+                                  checked={employee.fulltime}/>
+                    <FormPhoto label="Photo"
+                               style={{with: '128px', height: '128px'}}
+                               handler={handleFileInput}
+                               src={employee.photo} />
+                    <FormGroup>
                         <button onClick={hireEmployee} className="btn btn-success">Hire</button>
                         <button onClick={updateEmployee} className="btn btn-warning">Update</button>
                         <button onClick={retrieveEmployees} className="btn btn-info">Retrieve Employees</button>
-                    </div>
-                </div>
-            </div>
+                    </FormGroup>
+                </CardBody>
+            </Card>
             <p></p>
-            <div className="card">
+            <Card>
                 <CardHeader title="Employees"></CardHeader>
-                <div className="card-body">
+                <CardBody>
                     <table className="table table-bordered table-hover table-responsive">
                         <thead>
                         <tr>
@@ -231,9 +217,9 @@ function App() {
                         }
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
+                </CardBody>
+            </Card>
+        </Container>
     );
 }
 
