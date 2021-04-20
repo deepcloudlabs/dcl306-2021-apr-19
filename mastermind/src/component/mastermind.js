@@ -9,7 +9,7 @@ class Mastermind extends React.PureComponent {
         this.state = {
             gameLevel: 3,
             tries: 0,
-            secret: 549,
+            secret: this.createSecret(3),
             moves: [],
             guess: 145, // -1+1, 954 -> -3
             statistics: {
@@ -23,9 +23,28 @@ class Mastermind extends React.PureComponent {
         let value = Number(event.target.value);
         this.setState({guess: value});
     }
-    initGame = () => {
 
+    createDigit = (min,max) => {
+        return Math.floor(Math.random() * (max-min+1)) + min;
     }
+
+    createSecret = (level) => {
+        let digits = [];
+        digits.push(this.createDigit(1,9));
+        while (digits.length < level){
+            let candidate = this.createDigit(0,9);
+            if (!digits.includes(candidate))
+                digits.push(candidate);
+        }
+        return digits.reduce( (s,digit) => 10*s+digit, 0);
+    }
+
+    initGame = (game) => {
+        game.tries = 0;
+        game.secret = this.createSecret(game.gameLevel);
+        game.moves = [];
+    }
+
     createMove = (guess, secret) => {
         let perfectMatch = 0;
         let partialMatch = 0;
@@ -45,6 +64,7 @@ class Mastermind extends React.PureComponent {
         }
         return new Move(guess, perfectMatch, partialMatch);
     }
+
     play = () => {
         let game = {...this.state};
         game.tries++;
@@ -54,7 +74,7 @@ class Mastermind extends React.PureComponent {
                 game.statistics.wins++;
                 //TODO: Player wins the game! -> Routing!
             }
-            this.initGame();
+            this.initGame(game);
         } else {
             if (game.tries >= 10){
                 game.statistics.loses++;
