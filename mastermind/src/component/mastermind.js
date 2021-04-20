@@ -88,7 +88,18 @@ class Mastermind extends React.PureComponent {
                 game.moves.push(this.createMove(game.guess, game.secret))
             }
         }
+        localStorage.setItem("mastermind", JSON.stringify(game));
         this.setState(game);
+    }
+
+    componentDidMount() {
+        let game = localStorage.getItem("mastermind");
+        if (game === null || game === undefined){
+            localStorage.setItem("mastermind", JSON.stringify(this.state));
+        } else {
+            game = JSON.parse(game);
+            this.setState(game);
+        }
     }
 
     render = () => {
