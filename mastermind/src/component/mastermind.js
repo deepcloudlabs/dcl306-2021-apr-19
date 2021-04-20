@@ -3,6 +3,7 @@ import CardHeader from "../bootstrap/CardHeader";
 import Badge from "../bootstrap/Badge";
 import {Move} from "./move";
 import {MoveEvaluation} from "./move-evaluation";
+import {ProgressBar} from "./progress-bar";
 
 class Mastermind extends React.PureComponent {
     constructor(props, context) {
@@ -45,6 +46,7 @@ class Mastermind extends React.PureComponent {
 
     initGame = (game) => {
         game.tries = 0;
+        game.counter = 120;
         game.secret = this.createSecret(game.gameLevel);
         console.log(game.secret);
         game.moves = [];
@@ -105,7 +107,13 @@ class Mastermind extends React.PureComponent {
     }
 
     countdown = () => {
-
+        let game = {...this.state};
+        game.counter--;
+        if (game.counter <= 0){
+            this.initGame(game);
+            game.statistics.loses++;
+        }
+        this.setState(game);
     }
 
     render = () => {
@@ -116,6 +124,7 @@ class Mastermind extends React.PureComponent {
                     <div className="card-body">
                         <Badge label="Game Level" value={this.state.gameLevel}></Badge>
                         <Badge label="Tries" value={this.state.tries}></Badge>
+                        <ProgressBar label="Counter" value={this.state.counter} valueMax={120}></ProgressBar>
                         <div className="form-group">
                             <label htmlFor="guess">Guess:</label>
                             <input type="text"
