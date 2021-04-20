@@ -1,5 +1,7 @@
 import React from "react";
 import EmployeeModel from "./model/employee";
+import CardHeader from "./bootstrap/CardHeader";
+import Badge from "./bootstrap/Badge";
 
 function App() {
     const [employee, setEmployee] = React.useState(new EmployeeModel());
@@ -49,7 +51,7 @@ function App() {
             .then(res => setEmployee(res));
     }
 
-    function fireEmployeeAtRow(emp){
+    function fireEmployeeAtRow(emp) {
         fetch(`http://localhost:4001/employees/${emp.identityNo}`,
             {
                 method: "DELETE",
@@ -59,9 +61,10 @@ function App() {
             }).then(res => res.json())
             .then(res => {
                 setEmployee(res);
-                setEmployees( employees.filter( e => e.identityNo !== emp.identityNo ) );
+                setEmployees(employees.filter(e => e.identityNo !== emp.identityNo));
             });
     }
+
     function hireEmployee() {
         const emp = {...employee};
         fetch('http://localhost:4001/employees',
@@ -90,7 +93,7 @@ function App() {
             .then(res => console.log("Employee is updated!"))
     }
 
-    function copyRow(emp){
+    function copyRow(emp) {
         setEmployee(emp);
     }
 
@@ -108,9 +111,7 @@ function App() {
     return (
         <div className="container">
             <div className="card">
-                <div className="card-header">
-                    <h3 className="card-title">Employee Panel</h3>
-                </div>
+                <CardHeader title="Employee Panel"></CardHeader>
                 <div className="card-body">
                     <div className="form-group">
                         <label>Identity No:</label>
@@ -124,41 +125,31 @@ function App() {
                     </div>
                     <div className="form-group">
                         <label>Full name:</label>
-                        <input type="text"
-                               name="fullname"
-                               className="form-control"
+                        <input type="text" name="fullname" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.fullname}></input>
                     </div>
                     <div className="form-group">
                         <label>Iban:</label>
-                        <input type="text"
-                               name="iban"
-                               className="form-control"
+                        <input type="text" name="iban" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.iban}></input>
                     </div>
                     <div className="form-group">
                         <label>Salary:</label>
-                        <input type="text"
-                               name="salary"
-                               className="form-control"
+                        <input type="text" name="salary" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.salary}></input>
                     </div>
                     <div className="form-group">
                         <label>Birth Year:</label>
-                        <input type="text"
-                               name="birthYear"
-                               className="form-control"
+                        <input type="text" name="birthYear" className="form-control"
                                onChange={(event) => handleChange(event)}
                                value={employee.birthYear}></input>
                     </div>
                     <div className="form-group">
                         <label>Department:</label>
-                        <select type="text"
-                                name="department"
-                                className="form-control"
+                        <select type="text" name="department" className="form-control"
                                 onChange={(event) => handleChange(event)}
                                 value={employee.department}>
                             <option>IT</option>
@@ -169,9 +160,7 @@ function App() {
                     </div>
                     <div className="form-group">
                         <div className="form-check">
-                            <input type="checkbox"
-                                   name="fulltime"
-                                   className="form-check-input"
+                            <input type="checkbox" name="fulltime" className="form-check-input"
                                    onChange={(event) => handleChange(event)}
                                    checked={employee.fulltime}></input>
                             <label>Full time?</label>
@@ -195,33 +184,30 @@ function App() {
                         <button onClick={hireEmployee} className="btn btn-success">Hire</button>
                         <button onClick={updateEmployee} className="btn btn-warning">Update</button>
                         <button onClick={retrieveEmployees} className="btn btn-info">Retrieve Employees</button>
-
                     </div>
                 </div>
             </div>
             <p></p>
             <div className="card">
-                <div className="card-header">
-                    <h3 className="card-title">Employees</h3>
-                </div>
+                <CardHeader title="Employees"></CardHeader>
                 <div className="card-body">
                     <table className="table table-bordered table-hover table-responsive">
                         <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Identity No</th>
-                                <th>Full Name</th>
-                                <th>IBAN</th>
-                                <th>Salary</th>
-                                <th>Birth Year</th>
-                                <th>Department</th>
-                                <th>Full-time?</th>
-                                <th>Photo</th>
-                                <th>Operations</th>
-                            </tr>
+                        <tr>
+                            <th>No</th>
+                            <th>Identity No</th>
+                            <th>Full Name</th>
+                            <th>IBAN</th>
+                            <th>Salary</th>
+                            <th>Birth Year</th>
+                            <th>Department</th>
+                            <th>Full-time?</th>
+                            <th>Photo</th>
+                            <th>Operations</th>
+                        </tr>
                         </thead>
                         <tbody>{
-                           employees.map( (emp,idx) =>
+                            employees.map((emp, idx) =>
                                 <tr key={emp.identityNo} onMouseOver={() => copyRow(emp)}>
                                     <td>{idx + 1}</td>
                                     <td>{emp.identityNo}</td>
@@ -229,15 +215,19 @@ function App() {
                                     <td>{emp.iban}</td>
                                     <td>{emp.salary}</td>
                                     <td>{emp.birthYear}</td>
-                                    <td>{emp.department}</td>
-                                    <td>{emp.fulltime ? 'FULL-TIME' : 'PART-TIME'}</td>
+                                    <td><Badge className="badge badge-info" value={emp.department}></Badge></td>
+                                    <td><Badge className="badge badge-warning"
+                                               value={emp.fulltime ? 'FULL-TIME' : 'PART-TIME'}></Badge></td>
                                     <td><img className="img-thumbnail"
                                              src={emp.photo}
                                              alt="Employee's photo"
                                              style={{width: '64px', height: '64px'}}></img></td>
-                                    <td><button onClick={() => fireEmployeeAtRow(emp) } className="btn btn-danger">Fire</button></td>
+                                    <td>
+                                        <button onClick={() => fireEmployeeAtRow(emp)} className="btn btn-danger">Fire
+                                        </button>
+                                    </td>
                                 </tr>
-                           )
+                            )
                         }
                         </tbody>
                     </table>
