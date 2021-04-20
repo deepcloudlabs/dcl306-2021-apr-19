@@ -76,7 +76,7 @@ class Mastermind extends React.PureComponent {
             game.gameLevel++;
             if (game.gameLevel >= 10){
                 game.statistics.wins++;
-                //TODO: Player wins the game! -> Routing!
+                this.props.history.push("/wins")
             }
             this.initGame(game);
         } else {
