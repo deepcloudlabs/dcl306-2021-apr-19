@@ -1,6 +1,7 @@
 import React from "react";
 import CardHeader from "../bootstrap/CardHeader";
 import Badge from "../bootstrap/Badge";
+import {Move} from "./move";
 
 class Mastermind extends React.PureComponent {
     constructor(props, context) {
@@ -22,9 +23,47 @@ class Mastermind extends React.PureComponent {
         let value = Number(event.target.value);
         this.setState({guess: value});
     }
+    initGame = () => {
 
+    }
+    createMove = (guess, secret) => {
+        let perfectMatch = 0;
+        let partialMatch = 0;
+        const guessAsString = guess.toString();
+        const secretAsString = secret.toString();
+        for (let i=0;i<guessAsString.length;++i){
+            const g = guessAsString.charAt(i);
+            for (let j=0;j<secretAsString.length;++j){
+                const s = secretAsString.charAt(j);
+                if (s===g){
+                    if (i===j)
+                        perfectMatch++;
+                    else
+                        partialMatch++;
+                }
+            }
+        }
+        return new Move(guess, perfectMatch, partialMatch);
+    }
     play = () => {
-
+        let game = {...this.state};
+        game.tries++;
+        if (Number(game.guess) === game.secret ){
+            game.gameLevel++;
+            if (game.gameLevel >= 10){
+                game.statistics.wins++;
+                //TODO: Player wins the game! -> Routing!
+            }
+            this.initGame();
+        } else {
+            if (game.tries >= 10){
+                game.statistics.loses++;
+                //TODO: Player loses! -> Routing!
+            } else {
+                game.moves.push(this.createMove(game.guess, game.secret))
+            }
+        }
+        this.setState(game);
     }
 
     render = () => {
@@ -67,7 +106,7 @@ class Mastermind extends React.PureComponent {
                                     <tr key={move.guess}>
                                         <td>{index + 1}</td>
                                         <td>{move.guess}</td>
-                                        <td>{move.partialMatch} {move.perfectMatch}</td>
+                                        <td>-{move.partialMatch} +{move.perfectMatch}</td>
                                     </tr>
                                 )
                             }
