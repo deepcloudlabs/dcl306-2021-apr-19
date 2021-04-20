@@ -2,14 +2,17 @@ import React from "react";
 import CardHeader from "../bootstrap/CardHeader";
 import Badge from "../bootstrap/Badge";
 import {Move} from "./move";
+import {MoveEvaluation} from "./move-evaluation";
 
 class Mastermind extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
+        const secret = this.createSecret(3);
+        console.log(secret);
         this.state = {
             gameLevel: 3,
             tries: 0,
-            secret: this.createSecret(3),
+            secret: secret,
             moves: [],
             guess: 145, // -1+1, 954 -> -3
             statistics: {
@@ -42,6 +45,7 @@ class Mastermind extends React.PureComponent {
     initGame = (game) => {
         game.tries = 0;
         game.secret = this.createSecret(game.gameLevel);
+        console.log(game.secret);
         game.moves = [];
     }
 
@@ -78,6 +82,7 @@ class Mastermind extends React.PureComponent {
         } else {
             if (game.tries >= 10){
                 game.statistics.loses++;
+                this.initGame(game);
                 //TODO: Player loses! -> Routing!
             } else {
                 game.moves.push(this.createMove(game.guess, game.secret))
@@ -111,6 +116,15 @@ class Mastermind extends React.PureComponent {
                 </div>
                 <p></p>
                 <div className="card">
+                    <CardHeader title="Game Statistics"></CardHeader>
+                    <div className="card-body">
+                        <Badge label="Wins" value={this.state.statistics.wins}></Badge>
+                        <Badge label="Loses" value={this.state.statistics.loses}></Badge>
+                        <Badge label="Total" value={this.state.statistics.wins + this.state.statistics.loses}></Badge>
+                    </div>
+                </div>
+                <p></p>
+                <div className="card">
                     <CardHeader title="Moves"></CardHeader>
                     <div className="card-body">
                         <table className="table table-bordered table-hover">
@@ -126,7 +140,7 @@ class Mastermind extends React.PureComponent {
                                     <tr key={move.guess}>
                                         <td>{index + 1}</td>
                                         <td>{move.guess}</td>
-                                        <td>-{move.partialMatch} +{move.perfectMatch}</td>
+                                        <td><MoveEvaluation partial={move.partialMatch} perfect={move.perfectMatch}></MoveEvaluation></td>
                                     </tr>
                                 )
                             }
