@@ -49,6 +49,19 @@ function App() {
             .then(res => setEmployee(res));
     }
 
+    function fireEmployeeAtRow(emp){
+        fetch(`http://localhost:4001/employees/${emp.identityNo}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).then(res => res.json())
+            .then(res => {
+                setEmployee(res);
+                setEmployees( employees.filter( e => e.identityNo !== emp.identityNo ) );
+            });
+    }
     function hireEmployee() {
         const emp = {...employee};
         fetch('http://localhost:4001/employees',
@@ -75,6 +88,10 @@ function App() {
                 body: JSON.stringify(emp)
             }).then(res => res.json())
             .then(res => console.log("Employee is updated!"))
+    }
+
+    function copyRow(emp){
+        setEmployee(emp);
     }
 
     function retrieveEmployees() {
@@ -205,7 +222,7 @@ function App() {
                         </thead>
                         <tbody>{
                            employees.map( (emp,idx) =>
-                                <tr key={emp.identityNo}>
+                                <tr key={emp.identityNo} onMouseOver={() => copyRow(emp)}>
                                     <td>{idx + 1}</td>
                                     <td>{emp.identityNo}</td>
                                     <td>{emp.fullname}</td>
@@ -216,8 +233,9 @@ function App() {
                                     <td>{emp.fulltime ? 'FULL-TIME' : 'PART-TIME'}</td>
                                     <td><img className="img-thumbnail"
                                              src={emp.photo}
+                                             alt="Employee's photo"
                                              style={{width: '64px', height: '64px'}}></img></td>
-                                    <td><button className="btn btn-danger">Fire</button></td>
+                                    <td><button onClick={() => fireEmployeeAtRow(emp) } className="btn btn-danger">Fire</button></td>
                                 </tr>
                            )
                         }
