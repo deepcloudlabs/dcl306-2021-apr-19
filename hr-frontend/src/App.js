@@ -170,8 +170,8 @@ function App() {
                         <label>Photo:</label>
                         <img className="img-thumbnail"
                              src={employee.photo}
-                             style={{with: '128px', height: '128px'}}
-                             alt="employee"></img>
+                             alt=""
+                             style={{with: '128px', height: '128px'}}></img>
                         <label className="btn btn-success">
                             <input type="file"
                                    style={{display: "none"}}
@@ -220,7 +220,7 @@ function App() {
                                                value={emp.fulltime ? 'FULL-TIME' : 'PART-TIME'}></Badge></td>
                                     <td><img className="img-thumbnail"
                                              src={emp.photo}
-                                             alt="Employee's photo"
+                                             alt=""
                                              style={{width: '64px', height: '64px'}}></img></td>
                                     <td>
                                         <button onClick={() => fireEmployeeAtRow(emp)} className="btn btn-danger">Fire
