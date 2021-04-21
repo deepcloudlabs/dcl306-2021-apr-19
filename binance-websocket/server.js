@@ -50,9 +50,13 @@ ws.on("message", data => {
     } ;
 	// console.log(model);
     let trade = new Trade(model);
+    //console.log(trade);
+    /*
     trade.save((err,t) => {
          if (err) console.error(err);
     });
+    */
+
     sockets.forEach( socket => {
         socket.emit('ticker',model);
     })
