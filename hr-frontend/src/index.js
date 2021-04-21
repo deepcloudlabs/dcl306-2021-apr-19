@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {combineReducers, createStore} from "redux";
+import {Provider} from "react-redux";
+import AppConnector from "./app-connector";
+import AppReducer from "./app-reducer";
+
+let reducers = combineReducers({appStore: AppReducer});
+
+let store = createStore(reducers);
 
 ReactDOM.render(
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <AppConnector />
+    </Provider>,
     document.getElementById('root')
 );
 
