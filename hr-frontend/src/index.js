@@ -4,16 +4,17 @@ import 'bootstrap/dist/css/bootstrap.css';
 import reportWebVitals from './reportWebVitals';
 import {combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
-import AppConnector from "./app-connector";
 import AppReducer from "./app-reducer";
 
 let reducers = combineReducers({appStore: AppReducer});
 
 let store = createStore(reducers);
 
+let LazyComponent = React.lazy(() => import("./app-connector"));
+
 ReactDOM.render(
     <Provider store={store}>
-        <AppConnector />
+        <LazyComponent></LazyComponent>
     </Provider>,
     document.getElementById('root')
 );

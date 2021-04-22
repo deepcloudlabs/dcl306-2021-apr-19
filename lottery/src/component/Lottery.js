@@ -10,17 +10,33 @@ class Lottery extends React.PureComponent {
         }
         this.render = this.render.bind(this);
     }
+
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        // shallow comparison -> PureComponent automatically does this!
+        // risk ! state model -> complex compound object -> missing updates on the UI
+        /*
+        return (this.state.columns !== nextState.columns) || (this.state.numbers !== nextState.numbers)
+            || (this.props.max !== nextProps.max);
+        return super.shouldComponentUpdate(nextProps, nextState, nextContext);
+        */
+        return this.state.columns !== nextState.columns;
+    }
+
     drawNumbers = () => {
         let newNumbers = Array.from(this.state.numbers);
         newNumbers.push(this.createLotteryNumbers());
         let newColumns = this.state.columns + 1;
-        this.setState({
+        this.setState({  // async
             numbers: newNumbers,
             columns: newColumns
+        }, () => {
+           console.log(this.state.columns);
         })
+        //setInterval(() => {}, 3000)
     }
 
-    createLotteryNumbers = () => {
+    createLotteryNumbers = () => { // no side effect
         let lotteryNumbers = [];
         while (lotteryNumbers.length < Number(this.props.size)){
             let candidate = Math.floor(Math.random() *  Number(this.props.max)) + 1;
@@ -45,6 +61,7 @@ class Lottery extends React.PureComponent {
             columns: removedNumbers.length
         })
     }
+    optimizeDrawNumbers = () => this.drawNumbers();
 
     render = () => {
         let numbersTable = "";
@@ -66,19 +83,24 @@ class Lottery extends React.PureComponent {
                         (nums,row_idx) => <LotteryRow key={row_idx}
                                                       index={row_idx}
                                                       removeRow={this.removeRow}
-                                                      numbers={nums}></LotteryRow>
+                                                      numbers={nums}>
+                            <td>Hello Mars!</td>
+                            <td>Hello Neptune!</td>
+                        </LotteryRow>
                     )
                 }
                 </tbody>
             </table>
         }
+        // <React.Fragment></React.Fragment>
+        // <>  </>
         return (
             <div className="container">
                 <div className="card-header">
                     <h2 className="card-title">Lottery Numbers</h2>
                 </div>
                 <div className="card-body">
-                    <button className="btn btn-success" onClick={() => this.drawNumbers()}>Draw</button>
+                    <button className="btn btn-success" onClick={this.optimizeDrawNumbers}>Draw</button>
                     <button className="btn btn-warning" onClick={this.resetNumbers}>Reset</button>
                     {numbersTable}
                 </div>
